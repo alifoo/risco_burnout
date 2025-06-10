@@ -1,4 +1,4 @@
-import lista_respostas from dados_coletados
+from dados_coletados import lista_respostas
 
 def minimizar_efeitos():
     print("\n--- Ação para minimização dos efeitos ---")
@@ -35,9 +35,14 @@ def calcular_percentual_risco_alto():
     time.sleep(2)
     print("lógica para 'Percentual de pessoas com nível de risco alto' .")
 
-def CalculaScoreIndividual(pessoa):
+def CalculaScoreIndividual(pessoa_nome):
     result = 0
     pesos = [3, 2, 3, 2, 3, 3, 2, 2, 2]
+    pessoa = 0
+    
+    for lista in lista_respostas:
+        if pessoa_nome in lista:
+            pessoa = lista_respostas.index(lista)
     
     #oh wow essa funçao ta gigante
     #cansaço fisico
