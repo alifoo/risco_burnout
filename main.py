@@ -59,49 +59,24 @@ while True:
         minimizar_efeitos()
 
     # Score e nível de risco para pessoa solicitada
-    elif deseja == 2:
-        from funções import score_risco
-
-        print("\n---Score w nilvel de risco ---")
-        time.sleep(2)
-
-        print("lógica para 'Score e nível de risco para pessoa solicitada'.")
+    elif opcao_menu == 2:
+        calcular_score_risco()
 
     # Impressão de todas as pessoas (considerando score obtido e classificação de risco)
-    elif deseja == 3:
-        from funções import imprimir_pessoas
-
-        print("\n--- Impressão de todas as pessoas (score e classificação) ---")
-        time.sleep(2)
-
-        print("lógica para 'Impressão de todas as pessoas'.")
+    elif opcao_menu == 3:
+        imprimir_pessoas()
 
     # Percentual de pessoas com nível de risco baixo
-    elif deseja == 4:
-        from funções import percentual_risco_baixo
-
-        print("\n--- Percentual de pessoas com nível de risco baixo ---")
-        time.sleep(2)
-
-        print("lógica para 'Percentual de pessoas com nível de risco baixo' .")
+    elif opcao_menu == 4:
+        calcular_percentual_risco_baixo()
 
     # Percentual de pessoas com nível de risco moderado
-    elif deseja == 5:
-        from funções import percentual_risco_moderado
-
-        print("\n--- Percentual de pessoas com nível de risco moderado ---")
-        time.sleep(2)
-
-        print("lógica para 'Percentual de pessoas com nível de risco moderado' .")
+    elif opcao_menu == 5:
+        calcular_percentual_risco_moderado()
 
     # Percentual de pessoas com nível de risco alto
-    elif deseja == 6:
-        from funções import percentual_risco_alto
-
-        print("\n--- Percentual de pessoas com nível de risco alto ---")
-        time.sleep(2)
-
-        print("lógica para 'Percentual de pessoas com nível de risco alto' .")
+    elif opcao_menu == 6:
+        calcular_percentual_risco_alto()
 
     # Encerrar o programa caso a opção celecionada seja 7
     else:
@@ -112,12 +87,12 @@ while True:
         )
         time.sleep(3)
         break
+
+    opcao_valida = False
+
     # Estrutura de repetição da pergunta para continuiar
-    Continue = input("\nVoltar para o menu? (S/N)\n").upper()
+    deseja_continuar = input("\nVoltar para o menu? (S/N)\n").upper()
 
-    valido_continue = comparaçao2(Continue)  # quando true, volta ao menu interativo
-
-    # estrurura de repetição da pergunta caso a letra dada naão seja S/N
     while valido_continue == False:
         Continue = input("ERRO!!!! Use N para não ou S para sim.\n").upper()
         valido_continue = comparaçao2(Continue)
