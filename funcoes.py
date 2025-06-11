@@ -41,79 +41,101 @@ def calcular_percentual_risco_alto():
 
 def CalculaScoreIndividual(pessoa_nome):
     result = 0
+    risco = ""
     pesos = [3, 2, 3, 2, 3, 3, 2, 2, 2]
-    pessoa = 0
+    pessoa_index = None
 
-    for lista in lista_respostas:
-        if pessoa_nome in lista:
-            pessoa = lista_respostas.index(lista)
+    while pessoa_index is None:
+        for lista in lista_respostas:
+            if pessoa_nome in lista and pessoa_nome != "Pessoa":
+                pessoa_index = lista_respostas.index(lista)
+                break
+        if not pessoa_index:
+            deseja_tentar_novamente = input(
+                "Pessoa não encontrada. Deseja tentar um nome diferente? (S/N) "
+            ).upper()
+            while deseja_tentar_novamente != "N" and deseja_tentar_novamente != "S":
+                print("Opção inválida! Tente novamente respondendo com S ou N.")
+                deseja_tentar_novamente = input(
+                    "Pessoa não encontrada. Deseja tentar um nome diferente? (S/N) "
+                ).upper()
+            if deseja_tentar_novamente == "N":
+                return
+            pessoa_nome = input("Digite o novo nome para busca: ")
 
-    if lista_respostas[pessoa][1] == "Nunca":
+    if lista_respostas[pessoa_index][1] == "Nunca":
         result += 0 * pesos[0]
-    elif lista_respostas[pessoa][1] == "Às vezes":
-        result += 1 * pesos[0]
-    elif lista_respostas[pessoa][1] == "Frequentemente":
-        result += 2 * pesos[0]
-    elif lista_respostas[pessoa][1] == "Todos os dias":
-        result += 3 * pesos[0]
+    elif lista_respostas[pessoa_index][1] == "Às vezes":
+        result += 1
+    elif lista_respostas[pessoa_index][1] == "Frequentemente":
+        result += 2
+    elif lista_respostas[pessoa_index][1] == "Todos os dias":
+        result += 3
     # energia pra tarefas
-    if lista_respostas[pessoa][2] == "Sim":
-        result += 0 * pesos[1]
-    elif lista_respostas[pessoa][2] == "Com dificuldade":
-        result += 1 * pesos[1]
-    elif lista_respostas[pessoa][2] == "Não conseguiu":
-        result += 2 * pesos[1]
+    if lista_respostas[pessoa_index][2] == "Sim":
+        result += 0
+    elif lista_respostas[pessoa_index][2] == "Com dificuldade":
+        result += 1
+    elif lista_respostas[pessoa_index][2] == "Não conseguiu":
+        result += 2
     # motivaçao pelo trabalho
-    if lista_respostas[pessoa][3] == "Sim":
-        result += 0 * pesos[2]
-    elif lista_respostas[pessoa][3] == "Neutro":
-        result += 1 * pesos[2]
-    elif lista_respostas[pessoa][3] == "Nada motivado(a)":
-        result += 2 * pesos[2]
+    if lista_respostas[pessoa_index][3] == "Sim":
+        result += 0
+    elif lista_respostas[pessoa_index][3] == "Neutro":
+        result += 1
+    elif lista_respostas[pessoa_index][3] == "Nada motivado(a)":
+        result += 2
     # procrastinaçao
-    if lista_respostas[pessoa][4] == "Não":
-        result += 0 * pesos[3]
-    elif lista_respostas[pessoa][4] == "Um pouco":
-        result += 1 * pesos[3]
-    elif lista_respostas[pessoa][4] == "Sim constantemente":
-        result += 2 * pesos[3]
+    if lista_respostas[pessoa_index][4] == "Não":
+        result += 0
+    elif lista_respostas[pessoa_index][4] == "Um pouco":
+        result += 1
+    elif lista_respostas[pessoa_index][4] == "Sim constantemente":
+        result += 2
     # sentido no trabalho
-    if lista_respostas[pessoa][5] == "Não":
-        result += 0 * pesos[4]
-    elif lista_respostas[pessoa][5] == "Às vezes":
-        result += 1 * pesos[4]
-    elif lista_respostas[pessoa][5] == "Quase sempre":
-        result += 2 * pesos[4]
+    if lista_respostas[pessoa_index][5] == "Não":
+        result += 0
+    elif lista_respostas[pessoa_index][5] == "Às vezes":
+        result += 1
+    elif lista_respostas[pessoa_index][5] == "Quase sempre":
+        result += 2
     # pensamentos negativos
-    if lista_respostas[pessoa][6] == "Não":
-        result += 0 * pesos[5]
-    elif lista_respostas[pessoa][6] == "Já tive essa semana":
-        result += 1 * pesos[5]
-    elif lista_respostas[pessoa][6] == "Tenho todos os dias":
-        result += 2 * pesos[5]
+    if lista_respostas[pessoa_index][6] == "Não":
+        result += 0
+    elif lista_respostas[pessoa_index][6] == "Já tive essa semana":
+        result += 1
+    elif lista_respostas[pessoa_index][6] == "Tenho todos os dias":
+        result += 2
     # isolamento emocional
-    if lista_respostas[pessoa][7] == "Não":
-        result += 0 * pesos[6]
-    elif lista_respostas[pessoa][7] == "Levemente":
-        result += 1 * pesos[6]
-    elif lista_respostas[pessoa][7] == "Muito":
-        result += 2 * pesos[6]
+    if lista_respostas[pessoa_index][7] == "Não":
+        result += 0
+    elif lista_respostas[pessoa_index][7] == "Levemente":
+        result += 1
+    elif lista_respostas[pessoa_index][7] == "Muito":
+        result += 2
     # isolamento social
-    if lista_respostas[pessoa][8] == "Não":
-        result += 0 * pesos[7]
-    elif lista_respostas[pessoa][8] == "Com esforço":
-        result += 1 * pesos[7]
-    elif lista_respostas[pessoa][8] == "Me isolei totalmente":
-        result += 2 * pesos[7]
+    if lista_respostas[pessoa_index][8] == "Não":
+        result += 0
+    elif lista_respostas[pessoa_index][8] == "Com esforço":
+        result += 1
+    elif lista_respostas[pessoa_index][8] == "Me isolei totalmente":
+        result += 2
     # fez algo prazeroso
-    if lista_respostas[pessoa][9] == "Sim":
-        result += 0 * pesos[8]
-    elif lista_respostas[pessoa][9] == "Não tive tempo":
-        result += 1 * pesos[8]
-    elif lista_respostas[pessoa][9] == "Nem vontade tive":
-        result += 2 * pesos[8]
+    if lista_respostas[pessoa_index][9] == "Sim":
+        result += 0
+    elif lista_respostas[pessoa_index][9] == "Não tive tempo":
+        result += 1
+    elif lista_respostas[pessoa_index][9] == "Nem vontade tive":
+        result += 2
 
-    return result
+    if result <= 10:
+        risco = "Baixo risco"
+    elif 11 <= result <= 20:
+        risco = "Moderado risco"
+    elif result > 20:
+        risco = "Alto risco"
+
+    return result, risco
 
 
 def TelaAbertura():
@@ -150,7 +172,7 @@ def TelaAbertura():
             "6 - Percentual de pessoas com nível de risco alto\n"
             "7 - Encerrar o programa\n"
         )
-        time.sleep(1)
+        # time.sleep(1)
 
         opcao_valida = False
 
@@ -166,25 +188,26 @@ def TelaAbertura():
                     "Tente novamente usando apenas os números validos (1-7):\n"
                 )
 
+        opcao_menu = int(opcao_menu)
         # Ação para minimização dos efeitos
         if opcao_menu == 1:
-            SugereMinimizacaoSintomas()
-
+            pass
+            # SugereMinimizacaoSintomas()
         # Score e nível de risco para pessoa solicitada
         elif opcao_menu == 2:
             nome_pessoa = input(
                 "Digite o nome da pessoa que deseja calcular o score e nível de risco de burnout: "
             )
-            CalculaScoreIndividual(nome_pessoa)
-
+            resultado = CalculaScoreIndividual(nome_pessoa)
+            print(resultado)
         # Impressão de todas as pessoas (considerando score obtido e classificação de risco)
         elif opcao_menu == 3:
-            ImprimeMatrizScoreRisco()
-
+            pass
+            # ImprimeMatrizScoreRisco()
         # Percentual de pessoas com nível de risco baixo
         elif opcao_menu == 4:
-            calcular_percentual_risco_baixo()
-
+            pass
+            # calcular_percentual_risco_baixo()
         # Percentual de pessoas com nível de risco moderado
         elif opcao_menu == 5:
             calcular_percentual_risco_moderado()
@@ -192,21 +215,19 @@ def TelaAbertura():
         # Percentual de pessoas com nível de risco alto
         elif opcao_menu == 6:
             calcular_percentual_risco_alto()
-
         # Encerrar o programa caso a opção celecionada seja 7
         else:
             print(
                 "Encerrando o programa.\n"
-                "Obrigado pela participação no programa de Análise de Risco de Burnout "
+                "Obrigado pela participação no programa de Análise de Risco de Burnout.\n"
                 "Tenha um otimo dia, até mais!"
             )
-            time.sleep(3)
             break
 
         opcao_valida = False
 
         # Estrutura de repetição da pergunta para continuar
-        opcao_continuar = input("\nVoltar para o menu? (S/N)\n").upper()
+        opcao_continuar = input("\nVoltar para a tela inicial? (S/N)\n").upper()
 
         while opcao_valida == False:
             opcao_valida = verificar_opcao_string(opcao_continuar)
@@ -220,8 +241,7 @@ def TelaAbertura():
         if opcao_continuar == "N":
             print(
                 "Encerrando o programa.\n"
-                "Obrigado pela participação no programa de Análise de Risco de Burnout/n "
+                "Obrigado pela participação no programa de Análise de Risco de Burnout.\n"
                 "Tenha um otimo dia, até mais!"
             )
-            time.sleep(3)
             break
