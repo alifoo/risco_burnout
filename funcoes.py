@@ -10,7 +10,7 @@ def minimizar_efeitos():
 
 
 def calcular_score_risco():
-    print("\n---Score w nilvel de risco ---")
+    print("\n---Score w nivel de risco ---")
     time.sleep(2)
     print("lógica para 'Score e nível de risco para pessoa solicitada'.")
 
@@ -23,20 +23,59 @@ def imprimir_pessoas():
 
 def calcular_percentual_risco_baixo():
     print("\n--- Percentual de pessoas com nível de risco baixo ---")
+    
     time.sleep(2)
-    # print("lógica para 'Percentual de pessoas com nível de risco baixo' .")
+    
+    riscoCount = 0
+    pessoaCount = 0
+    
+    for pessoa in lista_respostas:
+        if (pessoa[0] != "Pessoa"):
+            pessoaCount += 1
+            result, risco = CalculaScoreIndividual(pessoa[0])
+            if risco == "Baixo risco":
+                riscoCount += 1
+    
+    print(f'O percentual de pessoas com nível de risco baixo é de {(riscoCount/pessoaCount)*100:.2f}%.')
+    time.sleep(2)
 
 
 def calcular_percentual_risco_moderado():
     print("\n--- Percentual de pessoas com nível de risco moderado ---")
+    
     time.sleep(2)
-    print("lógica para 'Percentual de pessoas com nível de risco moderado' .")
+    
+    riscoCount = 0
+    pessoaCount = 0
+    
+    for pessoa in lista_respostas:
+        if (pessoa[0] != "Pessoa"):
+            pessoaCount += 1
+            result, risco = CalculaScoreIndividual(pessoa[0])
+            if risco == "Moderado risco":
+                riscoCount += 1
+    
+    print(f'O percentual de pessoas com nível de risco moderado é de {(riscoCount/pessoaCount)*100:.2f}%.')
+    time.sleep(2)
 
 
 def calcular_percentual_risco_alto():
     print("\n--- Percentual de pessoas com nível de risco alto ---")
+    
     time.sleep(2)
-    print("lógica para 'Percentual de pessoas com nível de risco alto' .")
+    
+    riscoCount = 0
+    pessoaCount = 0
+    
+    for pessoa in lista_respostas:
+        if (pessoa[0] != "Pessoa"):
+            pessoaCount += 1
+            result, risco = CalculaScoreIndividual(pessoa[0])
+            if risco == "Alto risco":
+                riscoCount += 1
+    
+    print(f'O percentual de pessoas com nível de risco alto é de {(riscoCount/pessoaCount)*100:.2f}%.')
+    time.sleep(2)
 
 
 def CalculaScoreIndividual(pessoa_nome):
@@ -139,7 +178,6 @@ def CalculaScoreIndividual(pessoa_nome):
 
 
 def TelaAbertura():
-
     # Verifica se o número 'deseja' está entre 1 e 7 (inclusive).
     def verificar_opcao_int(opcao):
         if opcao.isdigit():
@@ -206,8 +244,7 @@ def TelaAbertura():
             # ImprimeMatrizScoreRisco()
         # Percentual de pessoas com nível de risco baixo
         elif opcao_menu == 4:
-            pass
-            # calcular_percentual_risco_baixo()
+            calcular_percentual_risco_baixo()
         # Percentual de pessoas com nível de risco moderado
         elif opcao_menu == 5:
             calcular_percentual_risco_moderado()
