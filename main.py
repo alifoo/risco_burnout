@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
-from funcoes import TelaAbertura
+from funcoes import tela_abertura
+import warnings
 
-TelaAbertura()
+warnings.filterwarnings("ignore", category=SyntaxWarning)
+
+tela_abertura()
