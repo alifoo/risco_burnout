@@ -1,9 +1,6 @@
 from dados_coletados import lista_respostas
 import time
 from funcoes import *
-import warnings
-
-warnings.filterwarnings("ignore", category=SyntaxWarning)
 
 scores_em_cache = False
 lista_respostas_cache = []
@@ -41,82 +38,83 @@ def validar_input_sn(texto_input):
 
 
 def classificar_nivel_risco(resultado):
-    risco = ""
-    if resultado <= 10:
-        risco = "Baixo risco"
-    elif 11 <= resultado <= 20:
-        risco = "Moderado risco"
-    elif resultado > 20:
-        risco = "Alto risco"
-    return risco
+    if resultado > 20:
+        return "Alto risco"
+    elif resultado >= 11:
+        return "Moderado risco"
+    elif resultado >= 0:
+        return "Baixo risco"
+    else:
+        return "Inválido"
 
 
 def calcular_resultado(pessoa_index):
     resultado = 0
+    # cansaço fisico
     if lista_respostas[pessoa_index][1] == "Nunca":
-        resultado += 0
+        resultado += 0 * 3
     elif lista_respostas[pessoa_index][1] == "Às vezes":
-        resultado += 1
+        resultado += 1 * 3
     elif lista_respostas[pessoa_index][1] == "Frequentemente":
-        resultado += 2
+        resultado += 2 * 3
     elif lista_respostas[pessoa_index][1] == "Todos os dias":
-        resultado += 3
+        resultado += 3 * 3
     # energia pra tarefas
     if lista_respostas[pessoa_index][2] == "Sim":
-        resultado += 0
+        resultado += 0 * 2
     elif lista_respostas[pessoa_index][2] == "Com dificuldade":
-        resultado += 1
+        resultado += 1 * 2
     elif lista_respostas[pessoa_index][2] == "Não conseguiu":
-        resultado += 2
+        resultado += 2 * 2
     # motivaçao pelo trabalho
     if lista_respostas[pessoa_index][3] == "Sim":
-        resultado += 0
+        resultado += 0 * 3
     elif lista_respostas[pessoa_index][3] == "Neutro":
-        resultado += 1
+        resultado += 1 * 3
     elif lista_respostas[pessoa_index][3] == "Nada motivado(a)":
-        resultado += 2
+        resultado += 2 * 3
     # procrastinaçao
     if lista_respostas[pessoa_index][4] == "Não":
-        resultado += 0
+        resultado += 0 * 2
     elif lista_respostas[pessoa_index][4] == "Um pouco":
-        resultado += 1
+        resultado += 1 * 2
     elif lista_respostas[pessoa_index][4] == "Sim constantemente":
-        resultado += 2
+        resultado += 2 * 2
     # sentido no trabalho
     if lista_respostas[pessoa_index][5] == "Não":
-        resultado += 0
+        resultado += 0 * 3
     elif lista_respostas[pessoa_index][5] == "Às vezes":
-        resultado += 1
+        resultado += 1 * 3
     elif lista_respostas[pessoa_index][5] == "Quase sempre":
-        resultado += 2
+        resultado += 2 * 3
     # pensamentos negativos
     if lista_respostas[pessoa_index][6] == "Não":
-        resultado += 0
+        resultado += 0 * 3
     elif lista_respostas[pessoa_index][6] == "Já tive essa semana":
-        resultado += 1
+        resultado += 1 * 3
     elif lista_respostas[pessoa_index][6] == "Tenho todos os dias":
-        resultado += 2
+        resultado += 2 * 3
     # isolamento emocional
     if lista_respostas[pessoa_index][7] == "Não":
-        resultado += 0
+        resultado += 0 * 2
     elif lista_respostas[pessoa_index][7] == "Levemente":
-        resultado += 1
+        resultado += 1 * 2
     elif lista_respostas[pessoa_index][7] == "Muito":
-        resultado += 2
+        resultado += 2 * 2
     # isolamento social
     if lista_respostas[pessoa_index][8] == "Não":
-        resultado += 0
+        resultado += 0 * 2
     elif lista_respostas[pessoa_index][8] == "Com esforço":
-        resultado += 1
+        resultado += 1 * 2
     elif lista_respostas[pessoa_index][8] == "Me isolei totalmente":
-        resultado += 2
+        resultado += 2 * 2
     # fez algo prazeroso
     if lista_respostas[pessoa_index][9] == "Sim":
-        resultado += 0
+        resultado += 0 * 2
     elif lista_respostas[pessoa_index][9] == "Não tive tempo":
-        resultado += 1
+        resultado += 1 * 2
     elif lista_respostas[pessoa_index][9] == "Nem vontade tive":
-        resultado += 2
+        resultado += 2 * 2
 
     return resultado
 
@@ -189,7 +187,8 @@ def calcular_percentual_risco(nivel):
 
     if nivel == "baixo":
         for pessoa_info in lista_respostas_cache:
-            pessoaCount += 1
+            if pessoa_info[0] != "Pessoa":
+                pessoaCount += 1
             if pessoa_info[0] != "Pessoa" and pessoa_info[11] == "Baixo risco":
                 riscoCount += 1
         print(
@@ -197,7 +196,8 @@ def calcular_percentual_risco(nivel):
         )
     elif nivel == "moderado":
         for pessoa_info in lista_respostas_cache:
-            pessoaCount += 1
+            if pessoa_info[0] != "Pessoa":
+                pessoaCount += 1
             if pessoa_info[0] != "Pessoa" and pessoa_info[11] == "Moderado risco":
                 riscoCount += 1
         print(
@@ -205,7 +205,8 @@ def calcular_percentual_risco(nivel):
         )
     elif nivel == "alto":
         for pessoa_info in lista_respostas_cache:
-            pessoaCount += 1
+            if pessoa_info[0] != "Pessoa":
+                pessoaCount += 1
             if pessoa_info[0] != "Pessoa" and pessoa_info[11] == "Alto risco":
                 riscoCount += 1
         print(
@@ -305,7 +306,7 @@ def sugerir_minimizacao_sintomas():
 
 def tela_abertura():
     print(
-        """
+        r"""
     _   _  _   __ _    ___ ___ ___   ___  ___   ___ ___ ___  ___ ___    ___  ___   ___ _   _ ___ _  _  ___  _   _ _____ 
    /_\ | \| | /_/| |  |_ _/ __| __| |   \| __| | _ \_ _/ __|/ __/ _ \  |   \| __| | _ ) | | | _ \ \| |/ _ \| | | |_   _|
   / _ \| .` |/--\| |__ | |\__ \ _|  | |) | _|  |   /| |\__ \ (_| (_) | | |) | _|  | _ \ |_| |   / .` | (_) | |_| | | |  
