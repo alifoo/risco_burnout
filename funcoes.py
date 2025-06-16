@@ -78,7 +78,7 @@ def calcular_resultado(pessoa_index):
         resultado += 0 * 2
     elif lista_respostas[pessoa_index][4] == "Um pouco":
         resultado += 1 * 2
-    elif lista_respostas[pessoa_index][4] == "Sim constantemente":
+    elif lista_respostas[pessoa_index][4] == "Sim, constantemente":
         resultado += 2 * 2
     # sentido no trabalho
     if lista_respostas[pessoa_index][5] == "Não":
