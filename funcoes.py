@@ -143,13 +143,14 @@ def calcular_score_individual(pessoa_nome):
             pessoa_nome = input("Digite o novo nome para busca: ")
 
     # primeiro checa o cache
-    if len(lista_respostas_cache[pessoa_index]) > 10:
-        return (
-            lista_respostas_cache[pessoa_index][10],
-            lista_respostas_cache[pessoa_index][11],
-        )
-    if len(lista_respostas[pessoa_index]) > 10:
-        return lista_respostas[pessoa_index][10], lista_respostas[pessoa_index][11]
+    if len(lista_respostas_cache) > 0:
+        if len(lista_respostas_cache[pessoa_index]) > 10:
+            return (
+                lista_respostas_cache[pessoa_index][10],
+                lista_respostas_cache[pessoa_index][11],
+            )
+        if len(lista_respostas[pessoa_index]) > 10:
+            return lista_respostas[pessoa_index][10], lista_respostas[pessoa_index][11]
     else:
         resultado = calcular_resultado(pessoa_index)
         risco = classificar_nivel_risco(resultado)
