@@ -2,6 +2,7 @@ from dados_coletados import lista_respostas
 import time
 from funcoes import *
 
+# Criamos essas duas variáveis globais para manter todos os scores mapeados caso o usuário solicite 1 vez
 scores_em_cache = False
 lista_respostas_cache = []
 
@@ -23,6 +24,7 @@ def verificar_opcao_string(opcao):
     )  # Retorna true se opção for uma das strings válidas e do contrário false
 
 
+# Função para validar a escolha de Sim ou Não.
 def validar_input_sn(texto_input):
     opcao_valida = False
     opcao_continuar = input(texto_input).upper()
@@ -34,23 +36,23 @@ def validar_input_sn(texto_input):
             opcao_continuar = input(
                 "Tente novamente usando apenas os caracteres validos(S/N):\n"
             ).upper()
-    return opcao_continuar
+    return opcao_continuar  # Retorna a opção escolhida pelo usuário, e não um booleano
 
 
-def classificar_nivel_risco(resultado):
-    if resultado > 20:
+# Classifica nível de risco com base em score
+def classificar_nivel_risco(score):
+    if score > 20:
         return "Alto risco"
-    elif resultado >= 11:
+    elif score >= 11:
         return "Moderado risco"
-    elif resultado >= 0:
-        return "Baixo risco"
     else:
-        return "Inválido"
+        return "Baixo risco"
 
 
+# Função que calcula score com base em index de pessoa buscada na matriz de dados
 def calcular_resultado(pessoa_index):
     resultado = 0
-    # cansaço fisico
+    # Cansaço fisico
     if lista_respostas[pessoa_index][1] == "Nunca":
         resultado += 0 * 3
     elif lista_respostas[pessoa_index][1] == "Às vezes":
@@ -59,56 +61,56 @@ def calcular_resultado(pessoa_index):
         resultado += 2 * 3
     elif lista_respostas[pessoa_index][1] == "Todos os dias":
         resultado += 3 * 3
-    # energia pra tarefas
+    # Energia pra tarefas
     if lista_respostas[pessoa_index][2] == "Sim":
         resultado += 0 * 2
     elif lista_respostas[pessoa_index][2] == "Com dificuldade":
         resultado += 1 * 2
     elif lista_respostas[pessoa_index][2] == "Não conseguiu":
         resultado += 2 * 2
-    # motivaçao pelo trabalho
+    # Motivaçao pelo trabalho
     if lista_respostas[pessoa_index][3] == "Sim":
         resultado += 0 * 3
     elif lista_respostas[pessoa_index][3] == "Neutro":
         resultado += 1 * 3
     elif lista_respostas[pessoa_index][3] == "Nada motivado(a)":
         resultado += 2 * 3
-    # procrastinaçao
+    # Procrastinaçao
     if lista_respostas[pessoa_index][4] == "Não":
         resultado += 0 * 2
     elif lista_respostas[pessoa_index][4] == "Um pouco":
         resultado += 1 * 2
     elif lista_respostas[pessoa_index][4] == "Sim, constantemente":
         resultado += 2 * 2
-    # sentido no trabalho
+    # Sentido no trabalho
     if lista_respostas[pessoa_index][5] == "Não":
         resultado += 0 * 3
     elif lista_respostas[pessoa_index][5] == "Às vezes":
         resultado += 1 * 3
     elif lista_respostas[pessoa_index][5] == "Quase sempre":
         resultado += 2 * 3
-    # pensamentos negativos
+    # Pensamentos negativos
     if lista_respostas[pessoa_index][6] == "Não":
         resultado += 0 * 3
     elif lista_respostas[pessoa_index][6] == "Já tive essa semana":
         resultado += 1 * 3
     elif lista_respostas[pessoa_index][6] == "Tenho todos os dias":
         resultado += 2 * 3
-    # isolamento emocional
+    # Isolamento emocional
     if lista_respostas[pessoa_index][7] == "Não":
         resultado += 0 * 2
     elif lista_respostas[pessoa_index][7] == "Levemente":
         resultado += 1 * 2
     elif lista_respostas[pessoa_index][7] == "Muito":
         resultado += 2 * 2
-    # isolamento social
+    # Isolamento social
     if lista_respostas[pessoa_index][8] == "Não":
         resultado += 0 * 2
     elif lista_respostas[pessoa_index][8] == "Com esforço":
         resultado += 1 * 2
     elif lista_respostas[pessoa_index][8] == "Me isolei totalmente":
         resultado += 2 * 2
-    # fez algo prazeroso
+    # Fez algo prazeroso
     if lista_respostas[pessoa_index][9] == "Sim":
         resultado += 0 * 2
     elif lista_respostas[pessoa_index][9] == "Não tive tempo":
@@ -119,16 +121,20 @@ def calcular_resultado(pessoa_index):
     return resultado
 
 
+# Função que realiza todo o processo de cálculo de score e nível de risco com base em nome de uma pessoa
 def calcular_score_individual(pessoa_nome):
+    # Define variáveis iniciais
     resultado = 0
     risco = ""
     pessoa_index = None
 
+    # Se os headers Score e Risco não existem, criamos
     if "Score" not in lista_respostas[0]:
         lista_respostas[0].append("Score")
     if "Risco" not in lista_respostas[0]:
         lista_respostas[0].append("Risco")
 
+    # Realiza verificação até que pessoa seja identificada ou o usuário cancele
     while pessoa_index is None:
         for lista in lista_respostas:
             if pessoa_nome in lista and pessoa_nome != "Pessoa":
@@ -142,52 +148,69 @@ def calcular_score_individual(pessoa_nome):
                 return None, None
             pessoa_nome = input("Digite o novo nome para busca: ")
 
-    # primeiro checa o cache
+    # Primeiro checa o cache, pois se o usuário já tiver solicitado o cálculo de porcentagens, o resultado e nível de risco já estará disponível
     if len(lista_respostas_cache) > 0:
         if len(lista_respostas_cache[pessoa_index]) > 10:
+            # Se houver index maior que 10, é porque o resultado e risco já foi calculado
             return (
                 lista_respostas_cache[pessoa_index][10],
                 lista_respostas_cache[pessoa_index][11],
             )
-        if len(lista_respostas[pessoa_index]) > 10:
+        if (
+            len(lista_respostas[pessoa_index]) > 10
+        ):  # Verificar também em lista normal, pois pode ocorrer do usuário solicitar a mesma pessoa 2 vezes.
             return lista_respostas[pessoa_index][10], lista_respostas[pessoa_index][11]
     else:
+        # Caso não tenha o cálculo armazenado, chamamos as funções responsáveis
         resultado = calcular_resultado(pessoa_index)
         risco = classificar_nivel_risco(resultado)
 
-        lista_respostas[pessoa_index].append(str(resultado))
+        lista_respostas[pessoa_index].append(str(resultado))  # Armazena como string
         lista_respostas[pessoa_index].append(risco)
         return resultado, risco
+    return resultado, risco
 
 
+# Calcula todos os resultados e níveis de risco e armazena em cache
 def calcular_lista_respostas_cache():
-    global scores_em_cache
+    global scores_em_cache  # Declara utilização da variável scores_em_cache em escopo global
+
+    # Clona a lista de respostas para cache caso esteja vazia
     if len(lista_respostas_cache) == 0:
         for pessoa_info in lista_respostas:
             lista_respostas_cache.append(pessoa_info)
 
+    # Calculamos resultado usando enumerate para pegar facilmente o index de cada pessoa além da info de cada pessoa
     for i, pessoa_info in enumerate(lista_respostas_cache):
         if len(pessoa_info) <= 10 and pessoa_info[0] != "Pessoa":
             resultado = calcular_resultado(i)
             grau_risco = classificar_nivel_risco(resultado)
 
-            pessoa_info.extend([resultado, grau_risco])
+            pessoa_info.extend(
+                [resultado, grau_risco]
+            )  # Usamos o extend para incrementar cada linha com os resultados retornados acima
 
+    # Após calcularmos todos os scores e níveis de risco, mudamos a flag global scores_em_cache para sinalizar que já foram calculados
     scores_em_cache = True
 
 
+# Calcula o percentual de risco de todos os dados coletados com base em nível de risco solicitado.
+# Possíveis valores de nível: 'baixo', 'moderado', 'alto'.
 def calcular_percentual_risco(nivel):
     print(
         "========================== INÍCIO DO CÁLCULO DOS DADOS ==========================\n"
     )
+    # Verificamos a flag global para decidir se é necessário calcular o score e nível de risco de todos os dados
     if scores_em_cache == False:
         calcular_lista_respostas_cache()
 
+    # Iniciamos os counters
     riscoCount = 0
     pessoaCount = 0
 
-    if nivel == "baixo":
+    if nivel.lower() == "baixo":
         for pessoa_info in lista_respostas_cache:
+            # Incrementa counters
             if pessoa_info[0] != "Pessoa":
                 pessoaCount += 1
             if pessoa_info[0] != "Pessoa" and pessoa_info[11] == "Baixo risco":
@@ -195,8 +218,9 @@ def calcular_percentual_risco(nivel):
         print(
             f"O percentual de pessoas com nível de risco baixo é de {(riscoCount/pessoaCount)*100:.2f}%.\n"
         )
-    elif nivel == "moderado":
+    elif nivel.lower() == "moderado":
         for pessoa_info in lista_respostas_cache:
+            # Incrementa counters
             if pessoa_info[0] != "Pessoa":
                 pessoaCount += 1
             if pessoa_info[0] != "Pessoa" and pessoa_info[11] == "Moderado risco":
@@ -204,8 +228,9 @@ def calcular_percentual_risco(nivel):
         print(
             f"O percentual de pessoas com nível de risco moderado é de {(riscoCount/pessoaCount)*100:.2f}%.\n"
         )
-    elif nivel == "alto":
+    elif nivel.lower() == "alto":
         for pessoa_info in lista_respostas_cache:
+            # Incrementa counters
             if pessoa_info[0] != "Pessoa":
                 pessoaCount += 1
             if pessoa_info[0] != "Pessoa" and pessoa_info[11] == "Alto risco":
@@ -219,6 +244,7 @@ def calcular_percentual_risco(nivel):
     )
 
 
+# Função que gerencia a exibição de score individual
 def exibir_score_individual():
     nome_pessoa = input(
         "Digite o nome da pessoa que deseja calcular o score e nível de risco de burnout: "
@@ -233,11 +259,14 @@ def exibir_score_individual():
     deseja_calcular_novamente = validar_input_sn(
         "Deseja calcular o score de mais uma pessoa? (S/N) "
     )
+    # Chama o próprio gerenciador novamente enquanto o usuário desejar prosseguir
     if deseja_calcular_novamente == "S":
         exibir_score_individual()
 
 
+# Função que imprime todos os scores que já foram calculados. Ou seja, não verifica scores em cache, somente os que foram solicitados pelo usuário.
 def imprimir_todos_os_scores():
+    # Inicia o counter
     contador_scores_obtidos = 0
     for pessoa_info in lista_respostas:
         if len(pessoa_info) > 10 and pessoa_info[0] != "Pessoa":
@@ -249,6 +278,7 @@ def imprimir_todos_os_scores():
             print(
                 f"Exibindo informações de {pessoa_info[0]}:\n Score de burnout obtido: {pessoa_info[10]}. Nível de risco: {pessoa_info[11]}.\n\n"
             )
+    # Se o contador for 0, significa que o usuário ainda não solicitou o score de nenhuma pessoa em específico
     if contador_scores_obtidos == 0:
         print(
             "Nenhum score ou nível de risco encontrado. Por favor, realize o cálculo de score e nível de risco de ao menos um usuário antes de realizar a impressão dos dados."
@@ -259,7 +289,9 @@ def imprimir_todos_os_scores():
         )
 
 
+# Sugere ações para minimização de sintomas com base em input do usuário
 def sugerir_minimizacao_sintomas():
+    # Lista que mapeia todas as ações de melhora com base em index
     acoes_para_minimizacao = [
         "Evite estudar até tarde e reduza o uso de telas à noite. Incorpore pausas estratégicas durante o dia (técnica Pomodoro, por exemplo).",
         "Organize sua rotina começando por pequenas vitórias, como arrumar a cama ou tomar café — isso ativa o cérebro e gera estímulo. ",
@@ -275,6 +307,7 @@ def sugerir_minimizacao_sintomas():
     print(
         "Escolha um dos sintomas do burnout abaixo para obter sugestões de ação para minimizá-lo."
     )
+    # é uma lista com base em index pois cada opção do usuário - 1 resulta no index correspondente
     print(
         "1 - Cansaço Físico\n"
         "2 - Energia para Tarefas\n"
@@ -292,6 +325,7 @@ def sugerir_minimizacao_sintomas():
     )
 
     while opcao_valida == False:
+        # Aqui, usamos a função auxiliadora para checar facilmente se a opção é válida passando os parâmetros numéricos
         opcao_valida = verificar_opcao(opcao_menu, 1, 9)
         if not opcao_valida:
             print("Erro! Entrada inválida.")
@@ -299,6 +333,7 @@ def sugerir_minimizacao_sintomas():
                 "Tente novamente usando apenas os números validos (1-9):\n"
             )
 
+    # Conforme mencionado acima, a opção selecionada -1 resulta no sintoma correspondente
     indice_acao = int(opcao_menu) - 1
     print(
         f"Para minimizar os efeitos do sintoma selecionado: {acoes_para_minimizacao[indice_acao]}"
@@ -306,6 +341,7 @@ def sugerir_minimizacao_sintomas():
 
 
 def tela_abertura():
+    # Realizamos o print de uma tela inicial com raw strings
     print(
         r"""
     _   _  _   __ _    ___ ___ ___   ___  ___   ___ ___ ___  ___ ___    ___  ___   ___ _   _ ___ _  _  ___  _   _ _____ 
@@ -336,13 +372,13 @@ def tela_abertura():
         )
         # Estrutura de repetição da pergunta caso valido = false
         while opcao_valida == False:
+            # Usamos a função auxiliar para simplificar o código
             opcao_valida = verificar_opcao(opcao_menu, 1, 7)
             if not opcao_valida:
                 print("Erro! Entrada inválida.")
                 opcao_menu = input(
                     "Tente novamente usando apenas os números validos (1-7):\n"
                 )
-
         opcao_menu = int(opcao_menu)
 
         # Ação para minimização dos efeitos
